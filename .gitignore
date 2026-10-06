@@ -1,2 +1,7 @@
-
 .DS_Store
+node_modules/
+.verify/
+.tools/
+.reference/
+tools/out-article.html
+tools/out-cases.html

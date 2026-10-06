@@ -1,117 +1,86 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
+
 <head>
-	<!-- Metadata -->
-    <meta charset="utf-8">
-    <meta name="keywords" content="cloudflare, pages, template, edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<meta name="description" content="Hooay 的个人博客 —— 折腾笔记、代码片段与踩坑记录。">
+	<meta name="keywords" content="hooay, hooay233, 博客, Cloudflare Pages">
 	<meta name="robots" content="index, follow">
-	<title>Home | Cloudflare Pages web template</title>
-    <link rel="shortcut icon" type="image/png" href="favicon.png">
-	<!-- Metadata END -->
-    
-	<!-- Stylesheets -->
-	<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css?1563">
-	<link rel="stylesheet" type="text/css" href="style.css?2909">
-	<link rel="stylesheet" type="text/css" href="./css/animate.min.css?7190">
-	<link rel="stylesheet" type="text/css" href="./css/all.min.css">
-	<!-- Stylesheets END -->
+	<title>Hooay 的博客</title>
+	<link rel="shortcut icon" href="favicon.png">
 
-	<!-- Here HTMLRewriter will write the Metadata from _middleware.js -->
+	<!-- 图标（Font Awesome 5）与站点外壳样式 -->
+	<link rel="stylesheet" href="css/all.min.css">
+	<link rel="stylesheet" href="css/site.css">
 </head>
+
 <body>
+	<div class="page-wrap">
 
-<!-- Preloader -->
-<div id="page-loading-blocs-notifaction" class="page-preloader"></div>
-<!-- Preloader END -->
+		<!-- 顶部导航栏 -->
+		<header class="headbar">
+			<div class="leftonhb"><a class="brand" href="index.html">Hooay 的博客</a></div>
+			<nav class="sitenav" id="sitenav">
+				<a class="nav-link" href="index.html">首页</a>
+				<a class="nav-link" href="index.html#posts">文章列表</a>
+				<a class="nav-link" href="about.html">关于</a>
+			</nav>
+			<div class="rightonhb"><button type="button" id="theme-toggle" class="graybtn">切换到暗色模式</button></div>
+		</header>
 
+		<!-- 欢迎语 / 站长简介 -->
+		<section class="title">
+			<h1 class="bigger">Hooay Chen</h1>
+			<p class="small gray">
+				(@hooay233) · <ruby>摸鱼<rp>(</rp><rt>MoYu</rt><rp>)</rp></ruby>之余，把折腾过的东西写下来
+			</p>
+			<p>
+				这里放我的<ruby>折腾<rp>(</rp><rt>tinkering</rt><rp>)</rp></ruby>笔记、代码片段和踩坑记录。
+			</p>
+		</section>
 
-<!-- Main container -->
-<div class="page-container">
-    
-<!-- bloc-0 -->
-<div class="bloc bloc-fill-screen l-bloc " id="bloc-0">
-	<div class="container fill-bloc-top-edge">
-		<div class="row">
-			<div class="col-12">
-				<nav class="navbar navbar-light row navbar-expand-md" role="navigation">
-					<div class="container-fluid ">
-						<a class="navbar-brand" href="index.html">Welcome.</a>
-						<button id="nav-toggle" type="button" class="ui-navbar-toggler navbar-toggler border-0 p-0 ms-auto me-md-0" aria-expanded="false" aria-label="Toggle navigation" data-bs-toggle="collapse" data-bs-target=".navbar-35092">
-							<span class="navbar-toggler-icon"></span>
-						</button>
-						<div class="collapse navbar-collapse navbar-120 navbar-29706 navbar-45188 navbar-18426 navbar-42371 navbar-35092">
-							<ul class="site-navigation nav navbar-nav ms-auto">
-								<li class="nav-item">
-									<a href="index.html" class="nav-link a-btn">Home</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</nav>
-			</div>
-		</div>
+		<!-- 文章列表区 -->
+		<main class="mainbody" id="posts">
+			<form id="search-form" class="searchbar" role="search">
+				<input id="search-input" class="mb-input search-input" type="search" autocomplete="off" placeholder="搜索文章标题 / 简介…">
+				<button type="submit" class="pinkbtn spcbtn_disabled" id="search-submit">搜索</button>
+				<button type="button" class="graybtn spcbtn_disabled" id="search-clear">重置</button>
+				<label class="sortwrap gray small">排序
+					<select id="sort-select">
+						<option value="newest">最新</option>
+						<option value="oldest">最早</option>
+					</select>
+				</label>
+			</form>
+
+			<div id="keyword-bar" class="keyword-bar"></div>
+			<div id="status" class="status small gray"></div>
+			<div id="post-list" class="post-list"></div>
+			<nav id="pager" class="pager"></nav>
+
+			<noscript>
+				<p class="small gray">文章列表与搜索需要启用 JavaScript。</p>
+			</noscript>
+		</main>
+
+		<!-- 页脚：访问统计 / 版权 -->
+		<footer id="bottom">
+			<span class="gray small">访问次数：</span>
+			<img src="https://count.getloli.com/@hooay233Blog?name=hooay233Blog&padding=1&offset=0&align=center&theme=rule34"
+				alt="hooay233Blog 访问次数">
+			<span class="gray small">© 2026 Hooay · 保留所有权利</span>
+			<span class="gray small">Powered by
+				<a href="https://pages.cloudflare.com/" target="_blank" rel="noopener noreferrer">Cloudflare Pages</a>
+			</span>
+		</footer>
+
 	</div>
-	<div class="container">
-		<div class="row">
-			<div class="col">
-				<h1 class="text-center mg-clear hero-header-text text-blue-gradient">
-					Welcome.<br>
-				</h1>
-				<h3 class="mg-md float-none text-center hero-subheader tc-black">
-					This is a template to get started with <a href="https://pages.cloudflare.com/" rel="nofollow noopener noreferrer" target="_blank">Cloudflare Pages</a>.
-				</h3>
-			</div>
-		</div>
-	</div>
-	<div class="container fill-bloc-bottom-edge">
-		<div class="row">
-			<div class="col-12">
-				<div class="text-center">
-					<a href="#" data-scroll-speed="1000" onclick="scrollToTarget('0',this)"><span class="fa fa-angle-down icon-md animated bounce animDelay08"></span></a>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- bloc-0 END -->
 
-<!-- bloc-1 -->
-<div class="bloc l-bloc" id="bloc-1">
-	<div class="container bloc-lg">
-		<div class="row">
-			<div class="col-lg-12 hero-first-col-mb">
-				<h1 class="mg-md text-center">
-					The Cloudflare Network
-				</h1>
-				<div class="text-center">
-					<a href="https://www.cloudflare.com/network/" class="btn btn-lg btn-rd btn-portland-orange" rel="nofollow noopener noreferrer" target="_blank">Explore</a>
-				</div>
-			</div>
-			<div class="offset-md-2 col-md-8 col-lg-8 offset-lg-2">
-				<div class="mx-auto d-block blocsapp-device blocsapp-device-mb mb-space-grey">
-					<img src="img/lazyload-ph.png" data-src="img/cloudflare-network.png" class="img-fluid lazyload" alt="cloudflare network" />
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- bloc-1 END -->
-
-<!-- ScrollToTop Button -->
-<a class="bloc-button btn btn-d scrollToTop" onclick="scrollToTarget('1',this)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 32 32"><path class="scroll-to-top-btn-icon" d="M30,22.656l-14-13-14,13"/></svg></a>
-<!-- ScrollToTop Button END-->
-
-
-</div>
-<!-- Main container END -->
-    
-
-
-<!-- Additional JS -->
-<script src="./js/bootstrap.bundle.min.js?8537"></script>
-<script src="./js/blocs.min.js?4639"></script>
-<script src="./js/lazysizes.min.js" defer></script><!-- Additional JS END -->
-
+	<!-- 脚本：theme.js 必须排在 site.js 之前（defer 保证按文档顺序执行） -->
+	<script src="js/theme.js" defer></script>
+	<script src="js/api.js" defer></script>
+	<script src="js/site.js" defer></script>
 </body>
+
 </html>

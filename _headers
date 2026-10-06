@@ -1,6 +1,20 @@
-# Reference: https://developers.cloudflare.com/pages/platform/headers/#prevent-your-pagesdev-deployments-showing-in-search-results
+# Cloudflare Pages 响应头
+# 文档：https://developers.cloudflare.com/pages/configuration/headers/
+
+# 预览域名（*.pages.dev）不要被搜索引擎收录
 https://:project.pages.dev/*
   X-Robots-Tag: noindex
-  
-https://:project.pages.dev/*
-  Access-Control-Allow-Origin: https://staging.:project.pages.dev
+
+# 静态资源缓存：字体久一点，CSS/JS 短一点（改了要能立刻看到）
+/fonts/*
+  Cache-Control: public, max-age=2592000
+
+/css/*
+  Cache-Control: public, max-age=3600
+
+/js/*
+  Cache-Control: public, max-age=3600
+
+# 文章页 HTML 很小，缓存 1 分钟即可；正文由 API 拉取（那边自带缓存头）
+/post/view
+  Cache-Control: public, max-age=60

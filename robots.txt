@@ -1,5 +1,7 @@
-# Reference: https://developers.cloudflare.com/fundamentals/get-started/reference/cdn-cgi-endpoint/#disallow-using-robotstxt
+# 本地/静态回退用的 robots.txt；部署到 Cloudflare Pages 后由 functions/robots.txt.js 动态生成。
+# 把下面的域名换成你的博客域名（sitemap 由 functions/sitemap.xml.js 动态生成，会自动带上文章列表）。
 User-agent: *
+Allow: /
 Disallow: /cdn-cgi/
 
-Sitemap: https://example.com/sitemap.xml
+Sitemap: https://blog.hooay233.top/sitemap.xml
