@@ -1,0 +1,4 @@
+# Cloudflare Pages 重写规则
+# 文章地址：/post/view?id=YYYYMMDD_X —— 映射到静态页 post/view.html（地址栏不变）
+/post/view    /post/view.html   200
+/post/view/*  /post/view.html   200

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<meta name="description" content="关于 Hooay 和这个博客：MarkBottom 渲染、Cloudflare Pages 托管、R2 存文章。">
+	<meta name="robots" content="index, follow">
+	<title>关于 · Hooay 的博客</title>
+	<link rel="shortcut icon" href="favicon.png">
+
+	<link rel="stylesheet" href="css/all.min.css">
+	<link rel="stylesheet" href="css/site.css">
+	<link rel="stylesheet" href="css/mb.css">
+</head>
+
+<body>
+	<div class="page-wrap">
+
+		<header class="headbar">
+			<div class="leftonhb"><a class="brand" href="index.html">Hooay 的博客</a></div>
+			<nav class="sitenav" id="sitenav">
+				<a class="nav-link" href="index.html">首页</a>
+				<a class="nav-link" href="index.html#posts">文章列表</a>
+				<a class="nav-link" href="about.html">关于</a>
+			</nav>
+			<div class="rightonhb"><button type="button" id="theme-toggle" class="graybtn">切换到暗色模式</button></div>
+		</header>
+
+		<section class="title">
+			<h1 class="bigger">关于</h1>
+			<p class="small gray">这个博客、这套渲染器和它的后端</p>
+		</section>
+
+		<main class="mainbody post-main">
+			<article class="card post-article post-body">
+
+				<h2>我是谁</h2>
+				<p>
+					Hooay（<a href="https://github.com/hooay233" target="_blank" rel="noopener noreferrer">@hooay233</a>），
+					个人主页在 <a href="https://www.hooay233.top/" target="_blank" rel="noopener noreferrer">www.hooay233.top</a>。
+					这个站点用来放平时折腾的笔记、代码片段和踩坑记录。
+				</p>
+
+				<h2>这个站点是怎么搭的</h2>
+				<ul>
+					<li><b>托管</b>：<a href="https://pages.cloudflare.com/" target="_blank" rel="noopener noreferrer">Cloudflare Pages</a>，纯静态 + 少量 Pages Functions。</li>
+					<li><b>文章存储</b>：Cloudflare R2，通过公开只读接口 <code>blog-api.hooay233.top</code> 取回；列表、元信息、正文、附件各有独立端点。</li>
+					<li><b>正文格式</b>：<a href="https://github.com/hooay233" target="_blank" rel="noopener noreferrer">MarkBottom</a>（<code>.mbmd</code>）—— 在 Markdown 基础上加了
+						<ruby>振仮名<rp>(</rp><rt>ruby</rt><rp>)</rp></ruby>、着重点、上色、折叠块、按钮 / 输入框、变量与计算语句、图表、竖排等语法。</li>
+					<li><b>渲染</b>：本站在浏览器里跑一个自己写的 MarkBottom 解释器（<code>js/mb-core.js</code> + <code>js/mb-inline.js</code> + <code>js/mb-block.js</code>），
+						直接把 <code>.mbmd</code> 解析成 DOM，而不是预先编译成 HTML。</li>
+				</ul>
+
+				<h2>文章地址</h2>
+				<p>每篇文章的固定地址是 <code>/post/view?id=YYYYMMDD_X</code>，例如：
+					<code>/post/view?id=20261006_1</code>。</p>
+				<p>列表支持按标题 / 简介模糊搜索（<code>?q=</code>）和按标签精确筛选（<code>?keyword=</code>），也可以排序（<code>?sort=oldest</code>）。</p>
+
+				<h2>联系我</h2>
+				<p>GitHub：<a href="https://github.com/hooay233" target="_blank" rel="noopener noreferrer">github.com/hooay233</a></p>
+
+				<p class="mb-gray">（这一页本身也是手写的 HTML，没有用渲染器。）</p>
+			</article>
+		</main>
+
+		<footer id="bottom">
+			<span class="gray small">访问次数：</span>
+			<img src="https://count.getloli.com/@hooay233Blog?name=hooay233Blog&padding=1&offset=0&align=center&theme=rule34"
+				alt="hooay233Blog 访问次数">
+			<span class="gray small">© 2026 Hooay · 保留所有权利</span>
+			<span class="gray small">Powered by
+				<a href="https://pages.cloudflare.com/" target="_blank" rel="noopener noreferrer">Cloudflare Pages</a>
+			</span>
+		</footer>
+
+	</div>
+
+	<script src="js/theme.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<meta name="description" content="Hooay 的博客文章">
+	<meta name="robots" content="index, follow">
+	<title>文章 · Hooay 的博客</title>
+	<link rel="shortcut icon" href="/favicon.png">
+
+	<!-- 图标（Font Awesome 5）、站点外壳样式、MarkBottom 必需样式 -->
+	<link rel="stylesheet" href="/css/all.min.css">
+	<link rel="stylesheet" href="/css/site.css">
+	<link rel="stylesheet" href="/css/mb.css">
+</head>
+
+<body>
+	<div class="page-wrap">
+
+		<!-- 顶部导航栏 -->
+		<header class="headbar">
+			<div class="leftonhb"><a class="brand" href="/index.html">Hooay 的博客</a></div>
+			<nav class="sitenav" id="sitenav">
+				<a class="nav-link" href="/index.html">首页</a>
+				<a class="nav-link" href="/index.html#posts">文章列表</a>
+				<a class="nav-link" href="/about.html">关于</a>
+			</nav>
+			<div class="rightonhb"><button type="button" id="theme-toggle" class="graybtn">切换到暗色模式</button></div>
+		</header>
+
+		<!-- 面包屑 -->
+		<nav class="crumbs small gray" aria-label="面包屑">
+			<a href="/index.html">首页</a>
+			<span class="crumb-sep">/</span>
+			<a href="/index.html#posts">文章</a>
+			<span class="crumb-sep">/</span>
+			<span id="crumb-title">加载中…</span>
+		</nav>
+
+		<main class="mainbody post-main">
+			<article class="card post-article">
+
+				<!-- 文章信息 -->
+				<header class="post-header">
+					<h1 id="post-title">正在加载…</h1>
+					<div id="post-meta" class="post-meta"></div>
+					<div id="post-summary" class="post-summary" hidden></div>
+					<div id="post-keywords" class="post-keywords" hidden></div>
+				</header>
+
+				<!-- 目录（由 post.js 生成） -->
+				<nav id="toc" class="toc" aria-label="目录" hidden></nav>
+
+				<!-- 正文：MarkBottom 解释器渲染到这里 -->
+				<div id="post-body" class="post-body">
+					<div class="post-loading">正在加载文章…</div>
+					<noscript>
+						<p>这篇文章需要启用 JavaScript 才能渲染：正文是从公开 API 取回的
+							MarkBottom 原文，由浏览器里的解释器现场解析成页面。</p>
+					</noscript>
+				</div>
+
+				<!-- 附件 -->
+				<section id="post-attachments" class="post-attachments" hidden></section>
+
+				<!-- 上一篇 / 下一篇 -->
+				<nav id="post-nav" class="post-nav" aria-label="文章导航"></nav>
+			</article>
+		</main>
+
+		<!-- 页脚 -->
+		<footer id="bottom">
+			<span class="gray small">访问次数：</span>
+			<img src="https://count.getloli.com/@hooay233Blog?name=hooay233Blog&padding=1&offset=0&align=center&theme=rule34"
+				alt="hooay233Blog 访问次数">
+			<span class="gray small">© 2026 Hooay · 保留所有权利</span>
+			<span class="gray small">Powered by
+				<a href="https://pages.cloudflare.com/" target="_blank" rel="noopener noreferrer">Cloudflare Pages</a>
+			</span>
+		</footer>
+
+	</div>
+
+	<!-- 脚本：theme.js 先上色；mb-*.js 是 MarkBottom 解释器（core → inline → block） -->
+	<script src="/js/theme.js" defer></script>
+	<script src="/js/api.js" defer></script>
+	<script src="/js/mb-core.js" defer></script>
+	<script src="/js/mb-inline.js" defer></script>
+	<script src="/js/mb-block.js" defer></script>
+	<script src="/js/post.js" defer></script>
+</body>
+
+</html>

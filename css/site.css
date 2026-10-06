@@ -1,0 +1,1159 @@
+@charset "UTF-8";
+/* ==========================================================================
+   site.css —— 站点外壳（chrome）样式
+   --------------------------------------------------------------------------
+   观感移植自 https://www.hooay233.top/ 的 style.css：
+     浅灰底 #f0f0f0 / 白色圆角卡片 10px + 0 2px 5px rgba(0,0,0,.1) 阴影
+     粉色主色 #ee3388 / 蓝色辅色 #3388ee / 灰 #ccc
+     暗色模式 #333 / #444 / #555 + #eee
+     类名与手感：pinkbtn / bluebtn / graybtn / bigger / small / gray / item
+                 spcbtn_disabled（点一下抖动）/ ruby 注音 / 底部访问统计
+   结构改为博客外壳：导航栏 + 文章列表 + 搜索 + 分页 + 页脚。
+   本文件必须对全站通用（首页、post/view.html 等都复用这里的类）。
+   ========================================================================== */
+
+/* ==========================================================================
+   1. 字体 @font-face
+   --------------------------------------------------------------------------
+   西文 Ubuntu / 中文 GWMSansUI / 中文斜体 HYYuYuanLuoShenXing / 代码 UbuntuMono
+   全部 font-display: swap，避免字体未就绪时文字不可见。
+   注意：本文件位于 css/，字体位于 fonts/，所以路径一律用 ../fonts/。
+   ========================================================================== */
+
+/* --- 西文正文：Ubuntu --- */
+@font-face {
+	font-family: 'Ubuntu';
+	src: url('../fonts/Ubuntu-R.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Ubuntu';
+	src: url('../fonts/Ubuntu-B.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Ubuntu';
+	src: url('../fonts/Ubuntu-RI.ttf') format('truetype');
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Ubuntu';
+	src: url('../fonts/Ubuntu-BI.ttf') format('truetype');
+	font-weight: 700;
+	font-style: italic;
+	font-display: swap;
+}
+
+/* --- 中文正文：GWMSansUI --- */
+@font-face {
+	font-family: 'GWMSansUI';
+	src: url('../fonts/GWMSansUI-Regular.woff') format('woff');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'GWMSansUI';
+	src: url('../fonts/GWMSansUI-Bold.woff') format('woff');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* --- 中文斜体：HYYuYuanLuoShenXing（只提供 italic 字面）--- */
+@font-face {
+	font-family: 'HYYuYuanLuoShenXing';
+	src: url('../fonts/HYYuYuanLuoShenXing-45U.ttf') format('truetype');
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'HYYuYuanLuoShenXing';
+	src: url('../fonts/HYYuYuanLuoShenXing-65U.ttf') format('truetype');
+	font-weight: 700;
+	font-style: italic;
+	font-display: swap;
+}
+
+/* --- 代码 / 等宽：UbuntuMono --- */
+@font-face {
+	font-family: 'UbuntuMono';
+	src: url('../fonts/UbuntuMono-R.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'UbuntuMono';
+	src: url('../fonts/UbuntuMono-B.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'UbuntuMono';
+	src: url('../fonts/UbuntuMono-RI.ttf') format('truetype');
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'UbuntuMono';
+	src: url('../fonts/UbuntuMono-BI.ttf') format('truetype');
+	font-weight: 700;
+	font-style: italic;
+	font-display: swap;
+}
+
+/* ==========================================================================
+   2. 设计令牌（CSS 变量）
+   --------------------------------------------------------------------------
+   明暗两套值都挂成变量。暗色值同时提供给：
+     body.dark-mode / body.dark_style  —— 正常切换路径
+     .dark_style                       —— 主题转场时那个"克隆页"用的路径
+   因为克隆出来的子树是脱离 body.dark-mode 作用域的，它只带着 dark_style 类，
+   所以必须靠 .dark_style 自己把变量改掉，克隆页才会是正确的目标配色。
+   ========================================================================== */
+:root {
+	color-scheme: light;
+
+	--bg: #f0f0f0;
+	--fg: #333;
+	--text-soft: #666;
+	--muted: #888;
+
+	--card: #fff;
+	--headbar: #eee;
+	--headbar-fg: #222;
+
+	--border: rgba(0, 0, 0, .08);
+	--input-bg: #fff;
+	--chip-bg: #e4e4e4;
+	--kw-bg: rgba(238, 51, 136, .10);
+
+	--shadow: 0 2px 5px rgba(0, 0, 0, .1);
+	--shadow-hover: 0 4px 14px rgba(0, 0, 0, .14);
+
+	/* 文字用的主色 / 辅色（明暗模式都保持亮一点，保证可读性） */
+	--pink: #ee3388;
+	--pink-hover: #cc2277;
+	--blue: #3388ee;
+	--blue-hover: #2277cc;
+
+	/* 按钮底色（沿用原站：暗色模式下按钮会自动压暗一档） */
+	--pink-btn: #ee3388;
+	--pink-btn-hover: #cc2277;
+	--blue-btn: #3388ee;
+	--blue-btn-hover: #2277cc;
+
+	--gray: #ccc;
+	--gray-hover: #999;
+	--gray-fg: #222;
+
+	--radius: 10px;
+	--radius-sm: 5px;
+
+	--font-body: Ubuntu, GWMSansUI, -apple-system, "Microsoft YaHei", sans-serif;
+	--font-italic: Ubuntu, HYYuYuanLuoShenXing, GWMSansUI, sans-serif;
+	--font-mono: UbuntuMono, Ubuntu, GWMSansUI, monospace;
+}
+
+body.dark-mode,
+body.dark_style,
+.dark_style {
+	color-scheme: dark;
+
+	--bg: #333;
+	--fg: #eee;
+	--text-soft: #ccc;
+	--muted: #aaa;
+
+	--card: #444;
+	--headbar: #555;
+	--headbar-fg: #eee;
+
+	--border: rgba(255, 255, 255, .12);
+	--input-bg: #3d3d3d;
+	--chip-bg: #555;
+	--kw-bg: rgba(238, 51, 136, .18);
+
+	--shadow: 0 2px 5px rgba(0, 0, 0, .35);
+	--shadow-hover: 0 4px 14px rgba(0, 0, 0, .5);
+
+	--pink-hover: #ff55aa;
+	--blue-hover: #55aaff;
+
+	--pink-btn: #cc2277;
+	--pink-btn-hover: #ee3388;
+	--blue-btn: #2277cc;
+	--blue-btn-hover: #3388ee;
+}
+
+/* ==========================================================================
+   3. 基础重置与排版
+   --------------------------------------------------------------------------
+   刻意【不】做 `* { margin: 0; padding: 0 }`：post/ 里的正文由 mb.css 负责排版，
+   全局清空 margin 会把 markdown 的段落/列表间距一起打掉。这里只重置本站外壳
+   真正用到的元素，正文排版交给 mb.css。
+   ========================================================================== */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	background-color: var(--bg);
+	color-scheme: light;
+}
+
+/* 由 js/theme.js 在解析期同步加上，尽量抢在首次绘制前，避免暗色模式闪白 */
+html.dark-mode {
+	background-color: #333;
+	color-scheme: dark;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: var(--bg);
+	color: var(--fg);
+	font-family: var(--font-body);
+	font-size: 16px;
+	line-height: 1.6;
+	-webkit-text-size-adjust: 100%;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body.dark-mode,
+body.dark_style {
+	background-color: #333;
+	color: #eee;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	line-height: 1.35;
+}
+
+img {
+	max-width: 100%;
+}
+
+::selection {
+	background-color: var(--pink);
+	color: #fff;
+}
+
+:focus-visible {
+	outline: 2px solid var(--blue);
+	outline-offset: 2px;
+}
+
+/* ==========================================================================
+   4. 斜体字体栈（中文斜体优先 + 缺字回退）
+   --------------------------------------------------------------------------
+   斜体元素优先走 HYYuYuanLuoShenXing（汉仪玉圆·洛神行，只有 italic 字面）。
+   字体栈：Ubuntu → HYYuYuanLuoShenXing → GWMSansUI → sans-serif
+   浏览器的字体匹配是"逐字符"的：
+     · 西文/数字先命中 Ubuntu（它有真正的 italic 字面，最漂亮）；
+     · 汉字先尝试 HYY（italic 字面存在 → 用它的真斜体字形）；
+     · 若某个字 HYY 里【缺字】，就继续往后回退到 GWMSansUI（正体字面存在），
+       此时该字没有 italic 字面，浏览器会自行做"合成斜体"（synthetic oblique）。
+   所以最终的观感是：HYY 覆盖到的汉字是真斜体，缺字部分由 GWMSansUI 合成倾斜，
+   不会出现豆腐块/漏字。这也正是要求 `font-style: italic` 必须写在元素上的原因
+   —— 否则浏览器不会去匹配 HYY 的 italic 字面。
+   --------------------------------------------------------------------------
+   注意：Font Awesome 的 <i class="far fa-xxx"> 也用 <i> 标签，如果无脑给 i 指定
+   字体栈会把图标字体挤掉（虽然 .far/.fas 的选择器优先级更高、通常不会出事），
+   这里显式排掉所有 FA 相关的 i，做到万无一失。 */
+em,
+cite,
+dfn,
+var,
+blockquote,
+.italic,
+i:not(.fa):not(.fas):not(.far):not(.fab):not([class*="fa-"]) {
+	font-family: var(--font-italic);
+	font-style: italic;
+}
+
+b, strong {
+	font-weight: 700;
+}
+
+code, pre, kbd, samp {
+	font-family: var(--font-mono);
+	font-size: .92em;
+}
+
+/* ==========================================================================
+   5. ruby 注音
+   ========================================================================== */
+ruby {
+	ruby-align: center;
+}
+
+rt {
+	font-size: .58em;
+	font-weight: 400;
+	line-height: 1.1;
+	color: var(--muted);
+}
+
+rp {
+	color: var(--muted);
+}
+
+/* ==========================================================================
+   6. 链接
+   --------------------------------------------------------------------------
+   原站的 `a:hover { transform: scale(1.2) }` 对行内元素本来就不生效，
+   且套在文章标题上会很难看，所以这里只保留原站的下划线手感；
+   放大手感交给 .button-link / .pinkbtn / .bluebtn。
+   ========================================================================== */
+a {
+	color: var(--pink);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+/* ==========================================================================
+   7. 页面骨架
+   ========================================================================== */
+.page-wrap {
+	max-width: 1000px;
+	min-height: 100vh;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+/* ==========================================================================
+   8. 顶部导航栏
+   --------------------------------------------------------------------------
+   post/view.html 复用：.headbar / .leftonhb / .brand / .sitenav / .nav-link /
+                       .rightonhb / #theme-toggle
+   ========================================================================== */
+.headbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px 16px;
+	background-color: var(--headbar);
+	color: var(--headbar-fg);
+	padding: 10px 20px;
+	border-radius: var(--radius);
+	margin-bottom: 20px;
+}
+
+.leftonhb {
+	flex: 0 0 auto;
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.brand {
+	color: var(--headbar-fg);
+	font-size: 18px;
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+.brand:hover {
+	color: var(--pink);
+	text-decoration: none;
+}
+
+.sitenav {
+	display: flex;
+	align-items: center;
+	flex: 1 1 auto;
+	gap: 4px;
+	min-width: 0;
+	overflow-x: auto;
+	scrollbar-width: none;
+	-webkit-overflow-scrolling: touch;
+}
+
+.sitenav::-webkit-scrollbar {
+	display: none;
+}
+
+.nav-link {
+	display: inline-block;
+	flex: 0 0 auto;
+	padding: 6px 12px;
+	border-radius: var(--radius-sm);
+	color: var(--headbar-fg);
+	font-size: 15px;
+	white-space: nowrap;
+	transition: background-color .25s ease, color .25s ease;
+}
+
+.nav-link:hover {
+	background-color: var(--kw-bg);
+	color: var(--pink);
+	text-decoration: none;
+}
+
+.nav-link.active {
+	background-color: var(--pink);
+	color: #fff;
+}
+
+.rightonhb {
+	flex: 0 0 auto;
+	margin-left: auto;
+}
+
+/* 原站写法：.rightonhb 里的按钮自带灰底（即使没挂 graybtn 也好看） */
+.rightonhb button {
+	background-color: var(--gray);
+	color: var(--gray-fg);
+	border: none;
+	padding: 10px 20px;
+	border-radius: var(--radius-sm);
+	cursor: pointer;
+}
+
+.rightonhb button:hover {
+	background-color: var(--gray-hover);
+	transition: background-color .3s;
+}
+
+/* ==========================================================================
+   9. 按钮：pinkbtn / bluebtn / graybtn / button-link / spcbtn_disabled
+   ========================================================================== */
+button {
+	font-family: inherit;
+	font-size: 16px;
+	border: none;
+	padding: 10px 20px;
+	border-radius: var(--radius-sm);
+	cursor: pointer;
+	background-color: var(--gray);
+	color: var(--gray-fg);
+	transition: background-color .3s ease, transform .3s ease, color .3s ease;
+}
+
+button:disabled {
+	cursor: not-allowed;
+	opacity: .55;
+}
+
+.pinkbtn {
+	background-color: var(--pink-btn);
+	color: #fff;
+}
+
+.pinkbtn:hover {
+	background-color: var(--pink-btn-hover);
+	transform: scale(1.2);
+	transition: background-color .3s ease, transform .3s ease;
+}
+
+.bluebtn {
+	background-color: var(--blue-btn);
+	color: #fff;
+}
+
+.bluebtn:hover {
+	background-color: var(--blue-btn-hover);
+	transform: scale(1.2);
+	transition: background-color .3s ease, transform .3s ease;
+}
+
+.graybtn {
+	background-color: var(--gray);
+	color: var(--gray-fg);
+}
+
+.graybtn:hover {
+	background-color: var(--gray-hover);
+	transition: background-color .3s ease;
+}
+
+.pinkbtn.button-link,
+.bluebtn.button-link {
+	display: inline-block;
+	padding: 10px 20px;
+	border-radius: var(--radius-sm);
+	text-decoration: none !important;
+	cursor: pointer;
+	font-size: 16px;
+	border: none;
+	transition: background-color .3s ease, transform .3s ease;
+}
+
+.pinkbtn.button-link {
+	background-color: var(--pink-btn);
+	color: #fff !important;
+}
+
+.pinkbtn.button-link:hover {
+	background-color: var(--pink-btn-hover);
+	transform: scale(1.2);
+	text-decoration: none;
+}
+
+.bluebtn.button-link {
+	background-color: var(--blue-btn);
+	color: #fff !important;
+}
+
+.bluebtn.button-link:hover {
+	background-color: var(--blue-btn-hover);
+	transform: scale(1.2);
+	text-decoration: none;
+}
+
+/* 原站"点一下抖一抖"的按钮钩子 */
+.spcbtn_disabled {
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	transition: transform .2s ease;
+}
+
+.spcbtn_disabled:hover {
+	transform: scale(1.2);
+}
+
+@keyframes shake-head {
+	0%, 100% { transform: translateX(0); }
+	15%, 45%, 75% { transform: translateX(-8px); }
+	30%, 60%, 90% { transform: translateX(8px); }
+}
+
+.spcbtn_disabled.shake {
+	animation: shake-head .35s ease;
+}
+
+/* 搜索栏里的按钮不大幅放大，否则 flex 行里会和邻居重叠 */
+.searchbar .pinkbtn:hover,
+.searchbar .graybtn:hover,
+.searchbar .spcbtn_disabled:hover {
+	transform: scale(1.05);
+}
+
+/* ==========================================================================
+   10. 文字工具类：bigger / small / gray / item
+   ========================================================================== */
+.bigger {
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.small {
+	font-size: 14px;
+}
+
+.gray {
+	color: var(--muted);
+}
+
+.small.gray,
+.gray.small {
+	color: var(--muted);
+}
+
+.item {
+	display: inline-block;
+	margin: 0 14px 8px 0;
+	font-size: 16px;
+}
+
+/* ==========================================================================
+   11. 首页标题卡
+   ========================================================================== */
+.title {
+	background-color: var(--card);
+	color: var(--fg);
+	border-radius: var(--radius);
+	padding: 20px;
+	box-shadow: var(--shadow);
+}
+
+.title h1,
+.title h2,
+.title h3,
+.title p {
+	margin: 0 0 6px;
+}
+
+.title > *:last-child {
+	margin-bottom: 0;
+}
+
+.title .bigger {
+	display: inline-block;
+	margin-bottom: 4px;
+}
+
+/* ==========================================================================
+   12. 主体 / 通用卡片
+   ========================================================================== */
+.mainbody {
+	margin-top: 20px;
+	padding: 20px;
+	background-color: var(--card);
+	color: var(--fg);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	text-align: left;
+}
+
+.card {
+	background-color: var(--card);
+	color: var(--fg);
+	border-radius: var(--radius);
+	padding: 20px;
+	box-shadow: var(--shadow);
+}
+
+/* ==========================================================================
+   13. 搜索栏 / 表单控件（.mb-input 全站通用，post/view.html 也会用）
+   ========================================================================== */
+.searchbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 14px;
+}
+
+.mb-input {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	padding: 10px 14px;
+	font-family: inherit;
+	font-size: 16px;
+	line-height: 1.4;
+	color: var(--fg);
+	background-color: var(--input-bg);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-sm);
+	-webkit-appearance: none;
+	appearance: none;
+	transition: border-color .25s ease, box-shadow .25s ease;
+}
+
+.mb-input::placeholder {
+	color: var(--muted);
+	opacity: 1;
+}
+
+.mb-input:focus {
+	outline: none;
+	border-color: var(--pink);
+	box-shadow: 0 0 0 3px var(--kw-bg);
+}
+
+.search-input {
+	flex: 1 1 240px;
+	width: auto;
+	min-width: 0;
+}
+
+.sortwrap {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-left: auto;
+	white-space: nowrap;
+}
+
+.sortwrap select {
+	font-family: inherit;
+	font-size: 14px;
+	color: var(--fg);
+	background-color: var(--input-bg);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-sm);
+	padding: 7px 8px;
+	cursor: pointer;
+}
+
+.sortwrap select:focus {
+	outline: none;
+	border-color: var(--pink);
+}
+
+/* ==========================================================================
+   14. 关键字栏 / 状态行
+   ========================================================================== */
+.keyword-bar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.keyword-bar:empty {
+	display: none;
+}
+
+.kw-chip {
+	padding: 4px 12px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--fg);
+	background-color: var(--chip-bg);
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	transition: background-color .25s ease, color .25s ease;
+}
+
+.kw-chip:hover {
+	background-color: var(--gray-hover);
+}
+
+.kw-chip.active {
+	background-color: var(--pink-btn);
+	color: #fff;
+	border-color: var(--pink-btn);
+}
+
+.kw-chip.active:hover {
+	background-color: var(--pink-btn-hover);
+}
+
+.status {
+	margin: 2px 0 12px;
+}
+
+.status:empty {
+	display: none;
+}
+
+/* js/site.js 的 setStatus() 会挂 status-error（错误）/ gray（普通），
+   这里用压暗一档的粉色当"警示色"，既醒目又不跳出原站配色。 */
+.status-error {
+	color: var(--pink-btn);
+	font-weight: 700;
+}
+
+/* 兼容写法（如果别处的脚本用 .error） */
+.status.error {
+	color: var(--pink-btn);
+	font-weight: 700;
+}
+
+/* ==========================================================================
+   15. 文章列表（由 js/site.js 动态生成）
+   ========================================================================== */
+.post-list {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.post-list:empty {
+	display: none;
+}
+
+/* js/site.js 在"没有文章 / 没有匹配结果"时插入的占位块 */
+.post-empty {
+	padding: 28px 16px;
+	text-align: center;
+	font-size: 15px;
+	color: var(--muted);
+	background-color: transparent;
+	border: 1px dashed var(--border);
+	border-radius: var(--radius);
+}
+
+.post-card {
+	background-color: var(--card);
+	color: var(--fg);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	padding: 16px 18px;
+	box-shadow: var(--shadow);
+	transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+
+.post-card:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--shadow-hover);
+	border-color: var(--pink);
+}
+
+.post-card-title {
+	margin: 0 0 8px;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.35;
+	word-wrap: break-word;
+}
+
+/* 标题用墨色、hover 才变粉：整屏粉色标题可读性太差，
+   粉色主色仍由标签 / 图标 / 按钮 / 分页激活态承担。 */
+.post-card-title a {
+	color: var(--fg);
+}
+
+.post-card-title a:hover {
+	color: var(--pink);
+	text-decoration: underline;
+}
+
+.post-card-summary {
+	margin: 0 0 10px;
+	font-size: 15px;
+	line-height: 1.65;
+	color: var(--text-soft);
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+.post-card-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 16px;
+	font-size: 14px;
+	color: var(--muted);
+}
+
+.meta-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.meta-item i {
+	color: var(--pink);
+}
+
+.post-card-keywords {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 10px;
+}
+
+.post-card-keywords:empty {
+	display: none;
+}
+
+.kw {
+	display: inline-block;
+	padding: 2px 10px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--pink);
+	background-color: var(--kw-bg);
+	border-radius: 999px;
+}
+
+.kw:hover {
+	background-color: var(--pink);
+	color: #fff;
+	text-decoration: none;
+}
+
+/* ==========================================================================
+   16. 分页器（由 js/site.js 动态生成）
+   ========================================================================== */
+.pager {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 20px;
+}
+
+.pager:empty {
+	display: none;
+}
+
+.pager-btn {
+	padding: 8px 16px;
+	font-size: 14px;
+	color: var(--gray-fg);
+	background-color: var(--gray);
+	border-radius: var(--radius-sm);
+}
+
+.pager-btn:hover:not(:disabled) {
+	background-color: var(--gray-hover);
+}
+
+.pager-btn.active {
+	background-color: var(--pink-btn);
+	color: #fff;
+}
+
+.pager-btn.active:hover {
+	background-color: var(--pink-btn-hover);
+}
+
+.pager-info {
+	font-size: 14px;
+	color: var(--muted);
+}
+
+/* js/site.js 在页码之间插入的省略号 */
+.pager-gap {
+	padding: 0 2px;
+	font-size: 14px;
+	color: var(--muted);
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+/* ==========================================================================
+   17. 页脚：底部访问统计区
+   ========================================================================== */
+#bottom {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+	margin: 24px auto;
+	text-align: center;
+}
+
+#bottom img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* ==========================================================================
+   18. 明暗主题转场动画（移植自原站 theme.js 配套样式）
+   --------------------------------------------------------------------------
+   转场时 js/theme.js 会克隆一份 .page-wrap 塞进 .panel，
+   用 clip-path 从右往左扫开，右边缘留一条 4px 的"扫描线"。
+   ========================================================================== */
+.theme-transition-overlay {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 9999;
+	pointer-events: none;
+	overflow: hidden;
+}
+
+.theme-transition-overlay .panel {
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	overflow: hidden;
+	pointer-events: none;
+	transition: clip-path .75s ease;
+	clip-path: inset(0 calc(100% - 4px) 0 0);
+	will-change: clip-path;
+}
+
+.theme-transition-overlay .panel.active {
+	clip-path: inset(0 0 0 0);
+}
+
+.theme-transition-overlay .page-clone {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	pointer-events: none;
+	box-sizing: border-box;
+}
+
+.theme-transition-overlay .scanline {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 4px;
+	height: 100%;
+	background: rgba(255, 255, 255, .95);
+	box-shadow: 0 0 12px rgba(255, 255, 255, .5);
+	pointer-events: none;
+}
+
+/* ==========================================================================
+   19. 响应式
+   --------------------------------------------------------------------------
+   ≤640px：导航折成第二行做横向滚动，不溢出、不依赖任何外部库。
+   ========================================================================== */
+@media (max-width: 640px) {
+	.page-wrap {
+		padding: 12px;
+	}
+
+	.headbar {
+		padding: 10px 12px;
+		gap: 8px 10px;
+	}
+
+	.brand,
+	.leftonhb {
+		font-size: 16px;
+	}
+
+	/* 导航整体换到第二行，占满宽度，长了就在本行内横向滚动 */
+	.sitenav {
+		order: 3;
+		flex: 1 1 100%;
+		gap: 2px;
+	}
+
+	.nav-link {
+		padding: 6px 10px;
+		font-size: 14px;
+	}
+
+	.rightonhb button,
+	#theme-toggle {
+		padding: 8px 12px;
+		font-size: 13px;
+	}
+
+	.title {
+		padding: 16px;
+	}
+
+	.bigger {
+		font-size: 20px;
+	}
+
+	.mainbody {
+		margin-top: 14px;
+		padding: 14px;
+	}
+
+	.search-input {
+		flex: 1 1 100%;
+	}
+
+	.sortwrap {
+		margin-left: 0;
+	}
+
+	.post-card {
+		padding: 14px;
+	}
+
+	.post-card-title {
+		font-size: 18px;
+	}
+
+	#bottom {
+		margin: 18px auto;
+	}
+}
+
+/* ==========================================================================
+   19. 文章页（post/view.html，追加部分）
+   注意：本站外壳的 .mb-input 是"整行表单输入框"（搜索栏用），
+   而 MarkBottom 语法里的 .mb-input 是行内小控件，这里把它还原回去。
+   ========================================================================== */
+.crumbs {
+	margin: 16px 2px 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+}
+
+.crumbs a {
+	color: var(--pink);
+	text-decoration: none;
+}
+
+.crumbs a:hover {
+	text-decoration: underline;
+}
+
+.crumb-sep {
+	opacity: .6;
+}
+
+.post-main {
+	padding: 20px;
+}
+
+.post-article {
+	padding: 26px 28px 30px;
+}
+
+.post-body .mb-input,
+.post-article .mb-input,
+.post-body select.mb-input,
+.post-body textarea.mb-input {
+	display: inline-block;
+	width: auto;
+	max-width: 100%;
+	padding: .1em .4em;
+	margin-bottom: 0;
+}
+
+.post-body textarea.mb-input {
+	width: auto;
+	min-width: 12em;
+	vertical-align: top;
+}
+
+.post-attachments {
+	margin-top: 2em;
+	padding-top: 1.2em;
+	border-top: 1px solid var(--border);
+	font-size: 14px;
+}
+
+.post-attachments h2 {
+	font-size: 1.1em;
+	margin: 0 0 .5em;
+}
+
+.post-attachments ul {
+	margin: 0;
+	padding-left: 1.3em;
+}
+
+.post-attachments li {
+	margin: .25em 0;
+	word-break: break-all;
+}
+
+.post-attachments a {
+	color: var(--blue);
+	text-decoration: none;
+}
+
+.post-attachments a:hover {
+	text-decoration: underline;
+}
+
+.post-keywords .kw.active {
+	background-color: var(--pink-btn);
+	color: #fff;
+	border-color: var(--pink-btn);
+}
+
+@media (max-width: 640px) {
+	.post-main,
+	.post-article {
+		padding: 14px;
+	}
+
+	.crumbs {
+		margin-top: 10px;
+		font-size: 13px;
+	}
+}

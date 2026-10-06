@@ -1,0 +1,431 @@
+/*!
+ * mb.css —— MarkBottom 0.1 必需样式（标准 §1、§1.1）+ 文章排版
+ * 说明：标准里以类名为契约的部分（.mb-ruby-under、.mb-float-right、.mb-slash …）
+ *       在这里必须同名实现；具体写法参考标准给出的示例并做了暗色模式适配。
+ */
+
+/* ===== 主题变量（标准 3.6：颜色由 CSS 变量提供，便于整站换色与暗色模式） ===== */
+:root {
+  --mbhighlightcolor: #2266dd;
+  --mbhighlightbgcolor: #eed66d88;
+  --mb-black-fg: #444;
+  --mb-black-bg: #444;
+  --mb-border: #ddd;
+  --mb-code-bg: #f6f6f6;
+  --mb-code-border: #e4e4e4;
+  --mb-table-head: #f0f0f0;
+  --mb-table-stripe: #fafafa;
+  --mb-quote-bar: #ee3388;
+}
+body.dark-mode {
+  --mbhighlightcolor: #66ccff;
+  --mbhighlightbgcolor: #7c4dff77;
+  --mb-black-fg: #333;
+  --mb-black-bg: #333;
+  --mb-border: #555;
+  --mb-code-bg: #2b2b2b;
+  --mb-code-border: #444;
+  --mb-table-head: #3d3d3d;
+  --mb-table-stripe: #383838;
+  --mb-quote-bar: #ee3388;
+}
+
+/* ===== 1. 必要的样式定义 ===== */
+.mb-ruby-under { ruby-position: under; }
+.mb-ruby-over  { ruby-position: over; }
+.mb-bigger { font-size: 150%; }
+.mb-smaller { font-size: 75%; }
+.mb-gray { opacity: 0.75; }
+.mb-commental { opacity: 0.75; font-size: 75%; }
+.mb-commental::before { opacity: 0.75; font-size: 75%; content: "("; }
+.mb-commental::after  { opacity: 0.75; font-size: 75%; content: ")"; }
+.mb-blacked { color: var(--mb-black-bg); background-color: var(--mb-black-bg); border-radius: 2px; }
+.mb-blacked:hover { color: var(--mb-black-fg) !important; background-color: var(--mb-black-fg); }
+.mb-fgcolored { color: var(--mbhighlightcolor, #26d); }
+.mb-bgcolored { background-color: var(--mbhighlightbgcolor, #ed6d); }
+.mb-bgpartialcolored {
+  background-image: linear-gradient(var(--mbhighlightbgcolor, #ed6d), var(--mbhighlightbgcolor, #ed6d));
+  background-repeat: no-repeat;
+  background-size: 100% 0.5em;
+  background-position: 0 calc(100% - 0em);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ===== 1.1 0.1 版新增语法所需的样式 ===== */
+/* —— 排版调整语句 —— */
+.mb-left   { text-align: left; }
+.mb-center { text-align: center; }
+.mb-right  { text-align: right; }
+.mb-block  { display: block; }
+.mb-float-right    { float: right;  clear: right; margin: 0 0 0.5em 0.5em; }
+.mb-float-left     { float: left;   clear: left;  margin: 0 0.5em 0.5em 0; }
+.mb-inline-middle  { display: inline-block; vertical-align: middle; }
+
+.mb-float-right img, .mb-float-left img, .mb-block img, .mb-inline-middle img,
+.mb-float-right video, .mb-float-left video, .mb-block video, .mb-inline-middle video { max-height: 100%; }
+.mb-float-right > p, .mb-float-left > p,
+.mb-block > p, .mb-inline-middle > p { margin: 0; height: 100%; }
+
+/* —— 竖排文本 —— */
+.mb-vertical   { writing-mode: vertical-rl; display: inline-block; vertical-align: top; }
+.mb-horizontal { writing-mode: horizontal-tb; }
+
+/* —— 原始文本 —— */
+.mb-origin { white-space: pre-wrap; }
+
+/* —— 按钮 / 输入框 / 选择框 —— */
+.mb-btn {
+  display: inline-block;
+  padding: 0.1em 0.8em;
+  border: 1px solid var(--mb-border);
+  border-radius: 0.35em;
+  background: var(--mb-code-bg);
+  color: inherit;
+  font: inherit;
+  line-height: 1.6;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mb-btn:hover  { background: var(--mb-table-head); }
+.mb-btn:active { background: var(--mb-table-stripe); }
+
+.mb-input {
+  font: inherit;
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--mb-border);
+  border-radius: 0.25em;
+  background: transparent;
+  color: inherit;
+}
+
+.mb-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  cursor: pointer;
+}
+
+/* —— 折叠块：基础形式 —— */
+.mb-fold > summary { cursor: pointer; }
+.mb-fold > summary::marker { color: var(--mbhighlightcolor); }
+
+/* —— 折叠块：末尾收起文本形式 —— */
+.mb-fold-inline { display: inline; }
+.mb-fold-inline > .mb-fold-state {
+  position: absolute; width: 0; height: 0; margin: 0;
+  opacity: 0; pointer-events: none;
+}
+.mb-fold-inline > .mb-fold-body,
+.mb-fold-inline > .mb-fold-close { display: none; }
+.mb-fold-inline > .mb-fold-state:checked ~ .mb-fold-body,
+.mb-fold-inline > .mb-fold-state:checked ~ .mb-fold-close { display: inline; }
+.mb-fold-inline > .mb-fold-state:checked ~ .mb-fold-title { display: none; }
+.mb-fold-title, .mb-fold-close { cursor: pointer; font: inherit; }
+.mb-fold-title::before { content: "▶ "; }
+.mb-fold-close { color: var(--mbhighlightcolor); }
+
+.mb-fold-block > .mb-fold-state {
+  position: absolute; width: 0; height: 0; margin: 0;
+  opacity: 0; pointer-events: none;
+}
+.mb-fold-block > .mb-fold-body,
+.mb-fold-block > .mb-fold-close { display: none; }
+.mb-fold-block > .mb-fold-state:checked ~ .mb-fold-body { display: block; }
+.mb-fold-block > .mb-fold-state:checked ~ .mb-fold-close { display: block; }
+.mb-fold-block > .mb-fold-state:checked ~ .mb-fold-title { display: none; }
+
+/* 分离式折叠块：被折叠的内容 */
+[data-mb-fold][hidden] { display: none; }
+[data-mb-fold].mb-fold-off:not(tr) { display: none; }
+tr.mb-fold-off > th,
+tr.mb-fold-off > td {
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+  padding: 0;
+  border: 0;
+  height: 0;
+}
+tr.mb-fold-off > th > *,
+tr.mb-fold-off > td > * { display: none; }
+input.mb-fold-state { accent-color: #ee3388; }
+
+/* —— 表格斜线 —— */
+/* 文字是绝对定位的，撑不开单元格，所以给一个下限，避免空单元格塌成一条线 */
+.mb-slash { position: relative; min-height: 3.4em; min-width: 5.5em; }
+.mb-slash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  opacity: 0.55;
+}
+.mb-slash-u::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="100" x2="100" y2="0" stroke="%23bbb" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>');
+}
+.mb-slash-d::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="0" x2="100" y2="100" stroke="%23bbb" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>');
+}
+.mb-slash > .mb-slash-head,
+.mb-slash > .mb-slash-mid,
+.mb-slash > .mb-slash-tail { position: absolute; font-size: 75%; line-height: 1.2; }
+.mb-slash > .mb-slash-mid { top: 33%; left: 50%; transform: translate(-50%, -50%); }
+.mb-slash-fan {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.55;
+}
+.mb-slash-fan line { stroke: #bbb; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.mb-slash-u > .mb-slash-head { top: 0.1em; left: 0.3em; }
+.mb-slash-u > .mb-slash-tail { bottom: 0.1em; right: 0.3em; }
+.mb-slash-d > .mb-slash-head { bottom: 0.1em; left: 0.3em; }
+.mb-slash-d > .mb-slash-tail { top: 0.1em; right: 0.3em; }
+
+/* —— 图表生成语句 —— */
+.mb-chart { margin: 0.5em 0; }
+.mb-chart-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.25em;
+  height: 8em;
+}
+.mb-chart-bar .mb-bar {
+  flex: 1 1 0;
+  height: calc(var(--mb-v) / var(--mb-max) * 100%);
+  background: var(--mbhighlightbgcolor, #ed6d);
+  border-radius: 0.15em 0.15em 0 0;
+  text-align: center;
+  font-size: 75%;
+}
+.mb-chart-pie { width: 8em; height: 8em; }
+svg.mb-chart { height: 8em; width: 100%; color: var(--mbhighlightcolor); }
+
+/* —— 图片 / 视频 / 音频 —— */
+img, video, audio { max-width: min(100%, 90vw); max-height: 75vh; }
+.mb-media-cover { display: inline-block; }
+.mb-media-cover > img { display: block; margin-bottom: 0.3em; }
+
+/* —— LaTeX 公式 —— */
+.mb-math {
+  font-family: "SF Mono", Consolas, "Noto Sans Mono CJK SC", monospace;
+  white-space: nowrap;
+}
+.mb-math-block {
+  display: block; margin: 0.8em 0; text-align: center; overflow-x: auto;
+  font-family: "SF Mono", Consolas, "Noto Sans Mono CJK SC", monospace;
+}
+.mb-math-rendered { font-family: inherit; white-space: normal; }
+
+/* ==========================================================================
+ * 以下是本站补充（不属于标准，但渲染时用得到）
+ * ========================================================================== */
+
+/* 行内执行语句的空锚点不占位 */
+.mb-exec { display: inline; }
+.mb-var { display: inline; }
+img[data-mb-noalt] { min-height: 1px; }
+
+/* 任务列表 */
+ul > li.mb-task, ol > li.mb-task { list-style: none; margin-left: -1.2em; }
+li.mb-task > input.mb-task-box { margin-right: 0.4em; accent-color: #ee3388; }
+
+/* 脚注 */
+.mb-footnotes { margin-top: 2em; font-size: 90%; opacity: 0.9; }
+.mb-footnotes ol { padding-left: 1.4em; }
+.mb-footnotes li { margin: 0.2em 0; }
+sup.mb-fn { font-size: 75%; line-height: 0; }
+sup.mb-fn a {
+  text-decoration: none;
+  padding: 0 0.15em;
+  border-radius: 3px;
+  background: var(--mbhighlightbgcolor);
+}
+.mb-fn-back { text-decoration: none; opacity: 0.7; margin-left: 0.2em; }
+
+/* ==========================================================================
+ * 文章正文排版（.post-body）
+ * ========================================================================== */
+.post-body {
+  line-height: 1.8;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  font-size: 16px;
+}
+.post-body > *:first-child { margin-top: 0; }
+.post-body h1, .post-body h2, .post-body h3,
+.post-body h4, .post-body h5, .post-body h6 {
+  line-height: 1.35;
+  margin: 1.6em 0 0.6em;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid var(--mb-border);
+  scroll-margin-top: 5em;
+}
+.post-body h1 { font-size: 1.7em; }
+.post-body h2 { font-size: 1.45em; }
+.post-body h3 { font-size: 1.22em; }
+.post-body h4 { font-size: 1.1em; }
+.post-body h5, .post-body h6 { font-size: 1em; border-bottom: none; }
+.post-body p { margin: 0.9em 0; }
+.post-body a { color: #ee3388; text-decoration: none; }
+.post-body a:hover { text-decoration: underline; }
+.post-body ul, .post-body ol { margin: 0.8em 0; padding-left: 1.6em; }
+.post-body li { margin: 0.3em 0; }
+.post-body li > ul, .post-body li > ol { margin: 0.2em 0; }
+.post-body hr {
+  border: none;
+  border-top: 1px solid var(--mb-border);
+  margin: 1.8em 0;
+}
+.post-body blockquote {
+  margin: 1em 0;
+  padding: 0.4em 1em;
+  border-left: 4px solid var(--mb-quote-bar);
+  background: var(--mb-code-bg);
+  border-radius: 0 8px 8px 0;
+}
+.post-body blockquote > p:first-child { margin-top: 0.3em; }
+.post-body blockquote > p:last-child { margin-bottom: 0.3em; }
+.post-body code {
+  font-family: UbuntuMono, "SF Mono", Consolas, "Noto Sans Mono CJK SC", monospace;
+  font-size: 0.92em;
+  background: var(--mb-code-bg);
+  border: 1px solid var(--mb-code-border);
+  border-radius: 4px;
+  padding: 0.06em 0.35em;
+}
+.post-body pre {
+  background: var(--mb-code-bg);
+  border: 1px solid var(--mb-code-border);
+  border-radius: 10px;
+  padding: 0.9em 1em;
+  overflow-x: auto;
+  line-height: 1.55;
+}
+.post-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.9em;
+}
+.post-body table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.95em;
+}
+.post-body table th, .post-body table td {
+  border: 1px solid var(--mb-border);
+  padding: 0.4em 0.7em;
+  text-align: left;
+  vertical-align: top;
+  position: relative;
+}
+.post-body table th { background: var(--mb-table-head); }
+.post-body table tbody tr:nth-child(even) { background: var(--mb-table-stripe); }
+.post-body table tr[data-mb-fold] { transition: opacity 0.2s ease; }
+.post-body img, .post-body video, .post-body audio { border-radius: 6px; }
+.post-body audio { width: min(100%, 28em); }
+.post-body .mb-chart-holder { margin: 1em 0; }
+.post-body details.mb-fold {
+  margin: 0.8em 0;
+  padding: 0.4em 0.8em;
+  border: 1px solid var(--mb-border);
+  border-radius: 8px;
+  background: var(--mb-code-bg);
+}
+.post-body summary { font-weight: 700; }
+
+/* 文章页头部 / 信息 / 目录 */
+.post-header { margin-bottom: 0.4em; }
+.post-header h1 {
+  font-size: 1.8em;
+  line-height: 1.3;
+  margin: 0 0 0.3em;
+  word-break: break-word;
+}
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em 1.1em;
+  font-size: 14px;
+  color: #888;
+  margin: 0.4em 0 0.8em;
+}
+body.dark-mode .post-meta { color: #aaa; }
+.post-meta .meta-item { display: inline-flex; align-items: center; gap: 0.35em; }
+.post-summary {
+  padding: 0.6em 0.9em;
+  border-left: 4px solid #3388ee;
+  background: var(--mb-code-bg);
+  border-radius: 0 8px 8px 0;
+  color: #555;
+  font-size: 0.95em;
+}
+body.dark-mode .post-summary { color: #ccc; }
+.post-keywords { margin: 0.9em 0 0; display: flex; flex-wrap: wrap; gap: 0.5em; }
+.post-keywords .kw {
+  display: inline-block;
+  padding: 0.15em 0.7em;
+  border-radius: 999px;
+  font-size: 13px;
+  background: #ee338822;
+  color: #ee3388;
+  text-decoration: none;
+  border: 1px solid #ee338855;
+}
+.post-keywords .kw:hover { background: #ee338844; }
+
+.toc {
+  margin: 0 0 1.6em;
+  padding: 0.8em 1em 0.9em;
+  border: 1px solid var(--mb-border);
+  border-radius: 10px;
+  background: var(--mb-code-bg);
+  font-size: 14px;
+}
+.toc-title {
+  font-weight: 700;
+  margin-bottom: 0.4em;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  cursor: pointer;
+  user-select: none;
+}
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc ol ol { padding-left: 1.1em; }
+.toc li { margin: 0.18em 0; }
+.toc a { color: inherit; text-decoration: none; opacity: 0.85; }
+.toc a:hover { color: #ee3388; opacity: 1; text-decoration: underline; }
+.toc.collapsed ol { display: none; }
+
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  margin-top: 2.2em;
+  padding-top: 1.2em;
+  border-top: 1px solid var(--mb-border);
+  font-size: 14px;
+}
+.post-nav a { color: #3388ee; text-decoration: none; }
+.post-nav a:hover { text-decoration: underline; }
+.post-loading, .post-error { padding: 1.5em 0; text-align: center; color: #888; }
+.post-error a { color: #ee3388; }
+
+@media (max-width: 640px) {
+  .post-body { font-size: 15.5px; line-height: 1.75; }
+  .post-header h1 { font-size: 1.45em; }
+  .post-body table { font-size: 0.88em; }
+  .post-body .mb-chart-bar { height: 6em; }
+  .post-nav { flex-direction: column; }
+  .mb-float-right, .mb-float-left { float: none; margin: 0.5em auto; display: block; text-align: center; }
+}
