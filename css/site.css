@@ -1102,18 +1102,26 @@ button:disabled {
 	opacity: .6;
 }
 
+/* 主体 div：本身就是一个卡片，四个子 div 依次是
+   文章信息 / 正文内容 / 附件（默认折叠）/ 上一篇·返回·下一篇 */
 .post-main {
-	padding: 20px;
-}
-
-.post-article {
 	padding: 26px 28px 30px;
 }
 
+/* —— 文章信息 div —— */
+.post-info .post-loading {
+	padding: 1em 0;
+}
+
+/* —— 正文内容 div —— */
+.post-content {
+	margin-top: .2em;
+}
+
 .post-body .mb-input,
-.post-article .mb-input,
-.post-body select.mb-input,
-.post-body textarea.mb-input {
+.post-content .mb-input,
+.post-info .mb-input,
+.post-main .mb-input {
 	display: inline-block;
 	width: auto;
 	max-width: 100%;
@@ -1127,6 +1135,7 @@ button:disabled {
 	vertical-align: top;
 }
 
+/* —— 附件 div（默认折叠：标题一行，点开才出列表） —— */
 .post-attachments {
 	margin-top: 2em;
 	padding-top: 1.2em;
@@ -1134,28 +1143,59 @@ button:disabled {
 	font-size: 14px;
 }
 
-.post-attachments h2 {
-	font-size: 1.1em;
-	margin: 0 0 .5em;
+.attach-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: .5em;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	font-weight: 700;
+	cursor: pointer;
 }
 
-.post-attachments ul {
+.attach-toggle:hover {
+	color: var(--pink);
+}
+
+.attach-toggle .attach-caret {
+	font-size: .85em;
+	transition: transform .2s ease;
+}
+
+.attach-toggle[aria-expanded="true"] .attach-caret {
+	transform: rotate(90deg);
+}
+
+.attach-body {
+	margin-top: .7em;
+}
+
+.attach-list {
 	margin: 0;
 	padding-left: 1.3em;
 }
 
-.post-attachments li {
+.attach-list li {
 	margin: .25em 0;
 	word-break: break-all;
 }
 
-.post-attachments a {
+.attach-list a {
 	color: var(--blue);
 	text-decoration: none;
 }
 
-.post-attachments a:hover {
+.attach-list a:hover {
 	text-decoration: underline;
+}
+
+/* about.html 里还是 <article class="card post-article post-body">，
+   这里保留一点内边距，免得改动那一页的外观 */
+.post-article {
+	padding: 26px 28px 30px;
 }
 
 .post-keywords .kw.active {
@@ -1167,7 +1207,7 @@ button:disabled {
 @media (max-width: 640px) {
 	.post-main,
 	.post-article {
-		padding: 14px;
+		padding: 16px;
 	}
 
 	.crumbs {

@@ -139,30 +139,46 @@
     });
   }
 
-  /* ---------- 附件 ---------- */
+  /* ---------- 附件（默认折叠） ---------- */
   function renderAttachments() {
     var box = $('#post-attachments');
     if (!box) return;
+    var list = $('#attach-list');
+    var bodyBox = $('#attach-body');
+    var toggle = $('#attach-toggle');
+    var title = $('#attach-title');
     var files = (meta.files || []);
     if (!files.length) { box.hidden = true; return; }
     box.hidden = false;
-    var title = document.createElement('h2');
-    title.textContent = '附件（' + files.length + '）';
-    var ul = document.createElement('ul');
-    files.forEach(function (f) {
-      var li = document.createElement('li');
-      var a = document.createElement('a');
-      a.href = BlogAPI.fileUrl(meta.id, f.name);
-      a.target = '_blank';
-      a.rel = 'noopener';
-      a.textContent = f.name;
-      li.appendChild(a);
-      li.appendChild(document.createTextNode(' · ' + (f.contentType || '未知类型') + ' · ' + BlogAPI.formatBytes(f.size)));
-      ul.appendChild(li);
-    });
-    box.textContent = '';
-    box.appendChild(title);
-    box.appendChild(ul);
+
+    if (list) {
+      list.textContent = '';
+      files.forEach(function (f) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = BlogAPI.fileUrl(meta.id, f.name);
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = f.name;
+        li.appendChild(a);
+        li.appendChild(document.createTextNode(' · ' + (f.contentType || '未知类型') + ' · ' + BlogAPI.formatBytes(f.size)));
+        list.appendChild(li);
+      });
+    }
+    if (title) title.textContent = '附件（' + files.length + '）';
+
+    // 默认折叠；点标题展开 / 收起
+    function setOpen(open) {
+      if (bodyBox) bodyBox.hidden = !open;
+      if (toggle) toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    setOpen(false);
+    if (toggle && !toggle.__bound) {
+      toggle.__bound = true;
+      toggle.addEventListener('click', function () {
+        setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+      });
+    }
   }
 
   /* ---------- 上一篇 / 下一篇 ---------- */
@@ -210,6 +226,8 @@
         '<br><a href="/index.html">← 回到文章列表</a>', true);
       var h = $('#post-title');
       if (h) h.textContent = '找不到这篇文章';
+      var crumb3 = $('#crumb-title');
+      if (crumb3) crumb3.textContent = '找不到这篇文章';
       return;
     }
     opts = { resolveUrl: function (u) { return u; }, fetch: global.fetch ? global.fetch.bind(global) : null };
@@ -238,6 +256,8 @@
         '<br><a href="/index.html">← 回到文章列表</a>', true);
       var t = $('#post-title');
       if (t) t.textContent = notFound ? '文章不存在' : '加载失败';
+      var crumb2 = $('#crumb-title');
+      if (crumb2) crumb2.textContent = notFound ? '文章不存在' : '加载失败';
       document.title = (notFound ? '文章不存在' : '加载失败') + ' · Hooay 的博客';
     });
   }

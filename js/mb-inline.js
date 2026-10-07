@@ -554,13 +554,7 @@
       }
       if (end < 0) return null;
       var inner = s.slice(p + open.length, end - open.length);
-      // 转义符优先级最高（标准 3.15 规则 1），代码段里也生效
-      inner = inner.replace(/\\([\s\S])/g, function (_, ch) {
-        if (ch === 'n') return '\n';
-        if (ch === 't') return '\t';
-        if (ch === 'o') return '';
-        return ch;
-      });
+      // 代码段里的反斜杠原样保留：不当转义符，否则正则、Windows 路径这类内容会被破坏
       var code = U.elem('code');
       code.textContent = inner;
       return { end: end, node: code };

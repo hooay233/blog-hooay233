@@ -82,6 +82,9 @@ function check(name, cond, extra) {
   check('关键词云出现', d.querySelectorAll('#keyword-bar .kw-chip').length > 0,
     'chips=' + d.querySelectorAll('#keyword-bar .kw-chip').length);
   check('主题按钮有文案', /模式/.test(d.getElementById('theme-toggle').textContent), d.getElementById('theme-toggle').textContent);
+  check('搜索/重置按钮不再是"无效果按钮"',
+    d.querySelectorAll('#search-form .spcbtn_disabled').length === 0,
+    '仍带 spcbtn_disabled 的搜索按钮数：' + d.querySelectorAll('#search-form .spcbtn_disabled').length);
 
   // 搜索
   console.log('\n== 首页搜索 ?q= ==');
@@ -130,6 +133,28 @@ function check(name, cond, extra) {
     /blog-api\.hooay233\.top\/api\/posts\/20261006_1\/img1\.webp/.test(d4.querySelector('#post-body img').src),
     (d4.querySelector('#post-body img') || {}).src);
   check('附件区', d4.querySelectorAll('#post-attachments li').length >= 1);
+
+  /* 层级关系：主体 div 下直接挂 文章信息 / 正文内容 / 附件 / 上下篇 */
+  const main = d4.getElementById('post-main');
+  const kids = Array.prototype.map.call(main.children, (el) => el.id || el.className);
+  check('主体 div 的直接子元素是这四个块', kids.length === 4 &&
+    main.children[0].id === 'post-info' && main.children[1].id === 'post-content' &&
+    main.children[2].id === 'post-attachments' && main.children[3].id === 'post-nav',
+    JSON.stringify(kids));
+  check('文章信息在 #post-info 里', d4.querySelector('#post-info #post-title') !== null &&
+    d4.querySelector('#post-info #post-meta') !== null);
+  check('正文在 #post-content 里', d4.querySelector('#post-content #post-body') !== null &&
+    d4.querySelector('#post-content #toc') !== null);
+  check('正文没有被塞进 文章信息 div', d4.querySelector('#post-info #post-body') === null);
+
+  /* 附件默认折叠 */
+  const attachToggle = d4.getElementById('attach-toggle');
+  const attachBody = d4.getElementById('attach-body');
+  check('附件默认折叠', attachBody.hidden === true && attachToggle.getAttribute('aria-expanded') === 'false');
+  attachToggle.dispatchEvent(new w4.MouseEvent('click', { bubbles: true }));
+  check('点标题能展开附件', attachBody.hidden === false && attachToggle.getAttribute('aria-expanded') === 'true');
+  attachToggle.dispatchEvent(new w4.MouseEvent('click', { bubbles: true }));
+  check('再点一下收起附件', attachBody.hidden === true && attachToggle.getAttribute('aria-expanded') === 'false');
   await waitFor(() => d4.querySelectorAll('#post-nav a').length >= 1, 8000).catch(() => {});
   check('上下篇 / 返回列表导航', d4.querySelectorAll('#post-nav a').length >= 1,
     'links=' + d4.querySelectorAll('#post-nav a').length + ' text=' + d4.getElementById('post-nav').textContent);

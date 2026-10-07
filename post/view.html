@@ -38,17 +38,19 @@
 			<span id="crumb-title">加载中…</span>
 		</nav>
 
-		<main class="mainbody post-main">
-			<article class="card post-article">
+		<!-- 主体 -->
+		<main class="mainbody post-main" id="post-main">
 
-				<!-- 文章信息 -->
-				<header class="post-header">
-					<h1 id="post-title">正在加载…</h1>
-					<div id="post-meta" class="post-meta"></div>
-					<div id="post-summary" class="post-summary" hidden></div>
-					<div id="post-keywords" class="post-keywords" hidden></div>
-				</header>
+			<!-- 文章信息 -->
+			<div class="post-info" id="post-info">
+				<h1 id="post-title" class="post-title">正在加载…</h1>
+				<div id="post-meta" class="post-meta"></div>
+				<div id="post-summary" class="post-summary" hidden></div>
+				<div id="post-keywords" class="post-keywords" hidden></div>
+			</div>
 
+			<!-- 正文内容 -->
+			<div class="post-content" id="post-content">
 				<!-- 目录（由 post.js 生成） -->
 				<nav id="toc" class="toc" aria-label="目录" hidden></nav>
 
@@ -60,13 +62,22 @@
 							MarkBottom 原文，由浏览器里的解释器现场解析成页面。</p>
 					</noscript>
 				</div>
+			</div>
 
-				<!-- 附件 -->
-				<section id="post-attachments" class="post-attachments" hidden></section>
+			<!-- 附件（默认折叠） -->
+			<div class="post-attachments" id="post-attachments" hidden>
+				<button type="button" class="attach-toggle" id="attach-toggle"
+					aria-expanded="false" aria-controls="attach-body">
+					<i class="fas fa-caret-right attach-caret" aria-hidden="true"></i>
+					<span id="attach-title">附件</span>
+				</button>
+				<div class="attach-body" id="attach-body" hidden>
+					<ul id="attach-list" class="attach-list"></ul>
+				</div>
+			</div>
 
-				<!-- 上一篇 / 下一篇 -->
-				<nav id="post-nav" class="post-nav" aria-label="文章导航"></nav>
-			</article>
+			<!-- 上一篇 / 返回 / 下一篇 -->
+			<div id="post-nav" class="post-nav" role="navigation" aria-label="文章导航"></div>
 		</main>
 
 		<!-- 页脚 -->
