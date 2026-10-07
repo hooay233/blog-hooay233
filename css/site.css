@@ -73,10 +73,28 @@
 	font-weight: 400;
 	font-style: italic;
 	font-display: swap;
+	size-adjust: 114.5%;
 }
 @font-face {
 	font-family: 'HYYuYuanLuoShenXing';
 	src: url('../fonts/HYYuYuanLuoShenXing-65U.ttf') format('truetype');
+	font-weight: 700;
+	font-style: italic;
+	font-display: swap;
+	size-adjust: 114.5%;
+}
+
+/* --- 中文正文：GWMSansUI --- */
+@font-face {
+	font-family: 'GWMSansUI';
+	src: url('../fonts/GWMSansUI-Regular.woff') format('woff');
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'GWMSansUI';
+	src: url('../fonts/GWMSansUI-Bold.woff') format('woff');
 	font-weight: 700;
 	font-style: italic;
 	font-display: swap;
@@ -162,7 +180,7 @@
 
 	--font-body: Ubuntu, GWMSansUI, -apple-system, "Microsoft YaHei", sans-serif;
 	--font-italic: Ubuntu, HYYuYuanLuoShenXing, GWMSansUI, sans-serif;
-	--font-mono: UbuntuMono, Ubuntu, GWMSansUI, monospace;
+	--font-mono: UbuntuMono, GWMSansUI, monospace;
 }
 
 body.dark-mode,
@@ -302,14 +320,14 @@ ruby {
 }
 
 rt {
-	font-size: .58em;
+	font-size: .5em;
 	font-weight: 400;
 	line-height: 1.1;
-	color: var(--muted);
+/* 	color: var(--muted); */
 }
 
 rp {
-	color: var(--muted);
+/* 	color: var(--muted); */
 }
 
 /* ==========================================================================

@@ -6,9 +6,9 @@
 
 /* ===== 主题变量（标准 3.6：颜色由 CSS 变量提供，便于整站换色与暗色模式） ===== */
 :root {
-  --mbhighlightcolor: #2266dd;
+  --mbhighlightcolor: #ee3388;
   --mbhighlightbgcolor: #eed66d88;
-  --mb-black-fg: #444;
+  --mb-black-fg: #fff;
   --mb-black-bg: #444;
   --mb-border: #ddd;
   --mb-code-bg: #f6f6f6;
@@ -18,15 +18,15 @@
   --mb-quote-bar: #ee3388;
 }
 body.dark-mode {
-  --mbhighlightcolor: #66ccff;
-  --mbhighlightbgcolor: #7c4dff77;
-  --mb-black-fg: #333;
-  --mb-black-bg: #333;
+  --mbhighlightcolor: #ee3388;
+  --mbhighlightbgcolor: #eed66d77;
+  --mb-black-fg: #000;
+  --mb-black-bg: #ddd;
   --mb-border: #555;
   --mb-code-bg: #2b2b2b;
   --mb-code-border: #444;
-  --mb-table-head: #3d3d3d;
-  --mb-table-stripe: #383838;
+  --mb-table-head: #333;
+  --mb-table-stripe: #3d3d3d;
   --mb-quote-bar: #ee3388;
 }
 
@@ -39,8 +39,8 @@ body.dark-mode {
 .mb-commental { opacity: 0.75; font-size: 75%; }
 .mb-commental::before { opacity: 0.75; font-size: 75%; content: "("; }
 .mb-commental::after  { opacity: 0.75; font-size: 75%; content: ")"; }
-.mb-blacked { color: var(--mb-black-bg); background-color: var(--mb-black-bg); border-radius: 2px; }
-.mb-blacked:hover { color: var(--mb-black-fg) !important; background-color: var(--mb-black-fg); }
+.mb-blacked { color: var(--mb-black-bg); background-color: var(--mb-black-bg); border-radius: 2px; transition: color 0.15s; }
+.mb-blacked:hover { color: var(--mb-black-fg) !important; background-color: var(--mb-black-bg); transition: color 0.15s;}
 .mb-fgcolored { color: var(--mbhighlightcolor, #26d); }
 .mb-bgcolored { background-color: var(--mbhighlightbgcolor, #ed6d); }
 .mb-bgpartialcolored {
@@ -317,9 +317,12 @@ sup.mb-fn a {
   display: block;
   overflow-x: auto;
   max-width: 100%;
+  width: fit-content;
   border-collapse: collapse;
   margin: 1em 0;
   font-size: 0.95em;
+  border-radius: 8px;
+  border: solid 2px #8887;
 }
 .post-body table th, .post-body table td {
   border: 1px solid var(--mb-border);
