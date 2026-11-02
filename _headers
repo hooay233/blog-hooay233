@@ -9,6 +9,9 @@ https://:project.pages.dev/*
 /fonts/*
   Cache-Control: public, max-age=2592000
 
+/fonts/GWMSansUI-Regular/*
+  Cache-Control: public, max-age=2592000
+
 /css/*
   Cache-Control: public, max-age=3600
 
